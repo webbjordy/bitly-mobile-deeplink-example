@@ -1,4 +1,4 @@
-# Bitly Mobile Deep Linking Demo (iOS)
+# Bitly Universal Link Example (iOS)
 
 This iOS demo app shows how to use [Bitly](https://bitly.com/) short links and custom domains to trigger **universal link** behavior in a mobile app. It’s meant for developers who want to understand how Bitly deep linking works with Apple’s native system.
 
@@ -6,9 +6,9 @@ This iOS demo app shows how to use [Bitly](https://bitly.com/) short links and c
 
 ## 🔗 What This Project Demonstrates
 
-- How to register a Bitly custom domain (`b.jordy.tech`) for mobile deep linking
+- How to register a Bitly custom domain (e.g. `b.yourdomain.com`) for mobile deep linking
 - How to open your iOS app from a Bitly link like:  
-  `https://b.jordy.tech/profile`
+  `https://b.yourdomain.com/profile`
 - How to route based on URL path (e.g., `/profile`, `/settings`)
 - How to integrate Apple’s Universal Links via `Associated Domains`
 
@@ -19,46 +19,57 @@ This iOS demo app shows how to use [Bitly](https://bitly.com/) short links and c
 ### 1. Clone This Repo
 
 ```bash
-git clone https://github.com/webbjordy/bitly-mobile-deeplink-example.git
-cd bitly-mobile-deeplink-example
-open BitlyDemoApp.xcodeproj
+git clone https://github.com/yourusername/BitlyUniversalLinkExample.git
+cd BitlyUniversalLinkExample
 ```
 
-### 2. Set Your Team + Bundle ID
+### 2. Create an Xcode Project
+This repo contains the Swift source files — you'll create a new Xcode project to import them:
 
-In Xcode:
-- Go to your app target → **Signing & Capabilities**
-- Choose your Apple Developer team
-- Replace the `Bundle Identifier` with something unique like:
+- Open Xcode and create a new iOS App project named `BitlyUniversalLinkExample`
+- Use **Swift** and **UIKit**
+- Replace the generated `AppDelegate.swift`, `main.swift`, and `Info.plist` with the ones in this repo
+
+### 3. Configure Signing and Team
+
+In your new Xcode project:
+- Go to the app target → **Signing & Capabilities**
+- Set your Apple Developer **Team**
+- Update the **Bundle Identifier** to something unique, e.g.:
+
+```
+com.yourcompany.bitlydemo
+```
+
+---
+
+### 4. Add Associated Domains
+
+Still under **Signing & Capabilities**:
+- Click **+ Capability**
+- Add **Associated Domains**
+- Add your Bitly custom domain:
   ```
-  com.yourname.bitlydemo
+  applinks:b.yourdomain.com
   ```
 
-### 3. Add Associated Domains
-
-Under **Signing & Capabilities**:
-- Add the **Associated Domains** entitlement
-- Include:
-  ```
-  applinks:b.jordy.tech
-  ```
-
-> Bitly automatically hosts the required `apple-app-site-association` file for your domain.
+> Replace `b.yourdomain.com` with your verified Bitly deep linking subdomain.
+> Bitly will automatically serve the `apple-app-site-association` file from this domain.
 
 ---
 
 ## 📱 Run the App
 
-- Connect a physical iPhone (Universal Links don’t work in simulator)
-- Build and run the app
-- Tap a Bitly link in Safari or Notes (e.g., `https://b.jordy.tech/profile`)
-- The app should open and log the path to console
+- Connect a physical iPhone (Universal Links do not work in the simulator)
+- Build and run the app from Xcode
+- Tap a Bitly short link (e.g., `https://b.yourdomain.com/profile`) in Safari or Notes
+- The app should launch and log routing info to the Xcode console
 
 ---
 
 ## 🔍 How Routing Works
 
-The app parses the incoming URL and logs a route match based on path:
+The app inspects the incoming universal link path and logs a message accordingly:
 
 ```swift
 switch url.path {
@@ -68,27 +79,29 @@ switch url.path {
 }
 ```
 
-You can replace these logs with actual navigation logic.
+You can swap these out with actual view controller navigation in your real app.
 
 ---
 
-## 📦 Bitlink Setup Example
+## 🔧 Bitlink Setup Example
 
-To test routing, create a Bitlink in your Bitly account with:
-- **Short link**: `https://b.jordy.tech/profile`
-- **Destination URL**: Can be any valid HTTPS URL
-- (Optional) Add deep link metadata if using Bitly’s API
+In Bitly, create a new short link:
+- Domain: `b.yourdomain.com`
+- Long URL: Can be any valid URL (e.g., `https://example.com`)
+- Final short link: `https://b.yourdomain.com/profile`
+
+This triggers routing to the “Profile” section of your app.
 
 ---
 
 ## 🧪 Notes
 
-- This project does **not** use custom URL schemes (e.g., `myapp://`) — only standard HTTPS Universal Links
-- No content needs to be hosted on `b.jordy.tech` — Bitly handles domain verification
-- This app is not meant for App Store distribution
+- This demo uses **Universal Links**, not custom URL schemes
+- Bitly must be configured with your custom domain
+- No App Store publishing is required — use Xcode or TestFlight
 
 ---
 
 ## 🤝 License
 
-MIT — use this for testing, demos, or as a starting point in production.
+MIT — use freely for testing, demos, or production bootstrapping.
